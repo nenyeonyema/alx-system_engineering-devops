@@ -1,0 +1,2 @@
+#!/bin/bash
+awk -F '\t' '{count[$1]++} END{for (i in count) print i, count[i]}' < webserver.log | sort -k2 -nr | head -n 11
