@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# A Script that displays content of the current directory
+
+
+for file in *; do
+	if [[ ! $file =~ ^\. ]]; then
+		filename=$(echo "$file" | cut -d '-' -f 2-)
+		echo "$filename"
+	fi
+done
