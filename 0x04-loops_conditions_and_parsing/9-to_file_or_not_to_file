@@ -2,7 +2,6 @@
 
 
 file_path="school"
-
 if [ -e "$file_path" ]; then
     echo "school file exists"
     
