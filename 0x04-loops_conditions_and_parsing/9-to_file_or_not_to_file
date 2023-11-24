@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-file_path="school.txt"
+file_path="school"
 
 if [ -e "$file_path" ]; then
     echo "school file exists"
