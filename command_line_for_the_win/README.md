@@ -5,7 +5,7 @@ We use the following commands:
 1. sftp remoteusername@hostname
 OR
 sftp remoteusername@remoteipaddress
-2. type 'yes' when asked to oauthorize the connection
+2. type 'yes' when asked to authorize the connection
 3. Input the remote machine password
 
 Congratulations, you have connected to your remote machine.
