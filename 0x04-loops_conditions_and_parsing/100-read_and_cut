@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# A script that displays the content of the file /etc/passwd
+
+
+filename="/etc/passwd"
+# Use IFS to set the field separator to ":" in /etc/passwd
+IFS=":"
+
+# Read the file using a while loop
+while read -r username _ uid _ _ home _; do
+    echo "$username:$uid:$home"
+done < "$filename"
