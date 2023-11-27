@@ -8,7 +8,15 @@ terminate(){
 }
 trap terminate SIGTERM
 
+counter=0
 while true; do
 	echo "To infinity and beyond"
 	sleep 2
+
+	((counter++))
+
+	if [ "$counter" -eq 3 ]; then
+		echo "I am invincible!!!"
+		counter=0
+	fi
 done
