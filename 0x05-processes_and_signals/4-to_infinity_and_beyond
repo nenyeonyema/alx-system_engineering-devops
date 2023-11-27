@@ -1,0 +1,7 @@
+#!/bin/bash
+# Display "To infinity and beyond indefinitely" with a sleep of 2 seconds
+
+while true; do
+    echo "To infinity and beyond indefinitely"
+    sleep 2
+done
