@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-# A script that stops 4-to_infinity_and_beyond process.
-
-
-pkill -f 7-highlander
-
-while pgrep -f "7-highlander" > /dev/null; do
-	sleep 1
-done
