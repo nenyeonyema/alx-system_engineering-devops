@@ -11,8 +11,6 @@ for pid_dir in /proc/[0-9]*/; do
 
     # Check if cmdline file exists and contains the word "bash"
     if [ -e "$pid_dir/cmdline" ] && grep -q "bash" "$pid_dir/cmdline"; then
-        process_name=$(tr -d '\0' < "$pid_dir/cmdline")
-
         # Display the PID and process name
         echo -e "$pid bash\n$script_pid bash"
     fi
