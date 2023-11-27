@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Ash script that dispalys till infinity and o SIGTERM signal
+
+
+terminate(){
+	echo "I am invicinble!!!"
+	exit 0
+}
+trap terminate SIGTERM
+
+while true; do
+	echo "To infinity and beyond"
+	sleep 2
+done
