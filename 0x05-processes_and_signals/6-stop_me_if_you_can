@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# A script that stops 4-to_infinity_and_beyond process.
+
+
+pkill -f 4-to_infinity_and_beyond
+
+while pgrep -f "4-to_infinity_and_beyond" > /dev/null; do
+	sleep 1
+	echo "Terminated"
+done
