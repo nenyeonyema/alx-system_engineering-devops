@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# A script that displays all the ports
+
+
+netstat -tulnep
