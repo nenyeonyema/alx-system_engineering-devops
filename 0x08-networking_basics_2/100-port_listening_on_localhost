@@ -10,7 +10,4 @@ fi
 PORT=98
 
 # Listen on the specified port
-# Listen on the specified port
-while true; do
-    { printf "HTTP/1.1 200 OK\r\nContent-Length: %s\r\n\r\nHello world\ntest" "$(echo -n "Hello world\ntest" | wc -c)"; } | nc -l -p $PORT -q 1
-done
+nc -l -p $PORT --c 'echo "Hello world"; echo "test";'
