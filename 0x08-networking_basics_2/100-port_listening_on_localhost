@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Check if the script is run with root privileges
+
+
+if [ "$(id -u)" -ne 0 ]; then
+    exit 1
+fi
+
+# Define the port to listen on
+PORT=98
+
+# Listen on the specified port
+nc -l -p $PORT
