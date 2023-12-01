@@ -10,4 +10,4 @@ fi
 PORT=98
 
 # Listen on the specified port
-nc -l -p $PORT
+nc -l -p $PORT -c 'echo "Hello world"; echo "test";'
