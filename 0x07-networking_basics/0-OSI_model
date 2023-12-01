@@ -2,10 +2,5 @@
 # The OSI model from the lowest to the highest are as follows:
 
 
-Phyiscal Layer,
-Data Link,
-Network,
-Transport protocol,
-Session,
-Presentation,
-Application.
+3
+2
