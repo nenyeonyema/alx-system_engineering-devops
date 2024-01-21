@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Define the server address
+server_address="8.8.8.8"
+
+# Use ssh with the private key to connect to the server
+ssh -i ~/.ssh/school ubuntu@$server_address
+
+# Optional: Print a message upon exiting the SSH session
+echo "Connection to $server_address closed."
