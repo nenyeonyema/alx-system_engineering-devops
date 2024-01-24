@@ -7,10 +7,10 @@ docker run -p 8080:80 -d -it holbertonschool/265-0
 CONTAINER_ID=$(docker ps -q)
 
 # Connect to the Docker container
-docker exec -it $CONTAINER_ID /bin/bash
+docker exec -it "$CONTAINER_ID" /bin/bash
 
 # Inside the container, navigate to the Apache configuration directory
-cd /etc/apache2/sites-available/
+cd /etc/apache2/sites-available/ || exit
 
 # Edit the default configuration file
 nano 000-default.conf
