@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# Start the Docker container
+docker run -p 8080:80 -d -it holbertonschool/265-0
+
+# Get the container ID
+CONTAINER_ID=$(docker ps -q)
+
+# Connect to the Docker container
+docker exec -it $CONTAINER_ID /bin/bash
+
+# Inside the container, navigate to the Apache configuration directory
+cd /etc/apache2/sites-available/
+
+# Edit the default configuration file
+nano 000-default.conf
+
+# Update the configuration to serve the "Hello Holberton" page
+# Add the following lines inside the <VirtualHost> block:
+
+cat <<EOL >> 000-default.conf
+DocumentRoot /var/www/html
+<Directory /var/www/html>
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+</Directory>
+EOL
+
+# Save the changes and exit the text editor
+
+# Restart the Apache server inside the container
+service apache2 restart
+
+# Exit the container
+exit
