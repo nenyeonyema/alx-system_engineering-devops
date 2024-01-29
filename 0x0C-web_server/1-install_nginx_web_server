@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# A script that configures a remote server to an nginx web server
+
+# Update package lists
+apt-get update
+
+# Install Nginx
+apt-get install -y nginx
+
+# Configure Nginx to listen on port 80
+sed -i 's/listen\ 80;/listen\ 80\ default_server;/g' /etc/nginx/sites-available/default
+
+# Restart Nginx without using systemctl
+/usr/sbin/nginx -s reload
+
+# Create index.html with "Hello World!"
+echo "Hello World!" > /var/www/html/index.html
