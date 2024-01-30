@@ -21,7 +21,7 @@ fi
 # Check if Nginx is listening on port 80, configure if not
 if ! netstat -tuln | grep -q ":80 "; then
     sed -i 's/listen\ 80;/listen\ 80\ default_server;/g' /etc/nginx/sites-available/default
-    systemctl restart nginx
+    nginx -s reload
 fi
 
 # Create index.html file with "Hello World!"
