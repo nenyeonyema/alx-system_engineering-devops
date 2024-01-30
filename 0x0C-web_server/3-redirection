@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Redirection script
+
+# Check if the script is run with sudo
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run this script with sudo."
+    exit 1
+fi
+
+# Update package lists
+apt-get update
+
+# Install Nginx
+apt-get install -y nginx
+
+# Configure Nginx redirection
+cat > /etc/nginx/sites-available/redirect <<EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    # Remove default Nginx server block
+    include /etc/nginx/sites-enabled/*;
+}
+EOF
+
+# Activate the new configuration
+ln -s /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
+
+# Test Nginx configuration
+nginx -t
+
+# Reload Nginx to apply the changes
+systemctl reload nginx
+
+echo "Nginx configured for redirection successfully."
