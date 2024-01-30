@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-# A script that configures a remote server to an nginx web server
+# A script that installs nginx server
+
+# Check if the script is run with sudo
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run this script with sudo."
+    exit 1
+fi
 
 # Update package lists
 apt-get update
@@ -7,11 +13,26 @@ apt-get update
 # Install Nginx
 apt-get install -y nginx
 
-# Configure Nginx to listen on port 80
-sed -i 's/listen\ 80;/listen\ 80\ default_server;/g' /etc/nginx/sites-available/default
+# Check if Nginx service is running, start if not
+if ! systemctl is-active --quiet nginx; then
+    systemctl start nginx
+fi
 
-# Restart Nginx without using systemctl
-/usr/sbin/nginx -s reload
+# Check if Nginx is listening on port 80, configure if not
+if ! netstat -tuln | grep -q ":80 "; then
+    sed -i 's/listen\ 80;/listen\ 80\ default_server;/g' /etc/nginx/sites-available/default
+    systemctl restart nginx
+fi
 
-# Create index.html with "Hello World!"
-echo "Hello World!" > /var/www/html/index.html
+# Create index.html file with "Hello World!"
+index_html="/var/www/html/index.html"
+if [ ! -f "$index_html" ]; then
+    echo "Hello World!" > "$index_html"
+fi
+
+# Ensure proper permissions for index.html
+chown www-data:www-data "$index_html"
+chmod 644 "$index_html"
+
+# Display success message
+echo "Nginx installed and configured successfully."
