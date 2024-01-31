@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Page not found 404
+
+# Check if the script is run with sudo
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run this script with sudo."
+    exit 1
+fi
+
+# Update package lists
+apt-get update
+
+# Install Nginx
+apt-get install -y nginx
+
+# Create custom 404 error page
+cat > /var/www/html/404.html <<EOF
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 Not Found</title>
+</head>
+<body>
+    <h1>Ceci n'est pas une page</h1>
+</body>
+</html>
+EOF
+
+# Configure Nginx to use the custom error page
+cat > /etc/nginx/sites-available/custom404 <<EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    error_page 404 /404.html;
+    location = /404.html {
+        root /var/www/html;
+        internal;
+    }
+
+    # Remove default Nginx server block
+    include /etc/nginx/sites-enabled/*;
+}
+EOF
+
+# Activate the new configuration
+ln -s /etc/nginx/sites-available/custom404 /etc/nginx/sites-enabled/
+
+# Test Nginx configuration
+nginx -t
+
+# Reload Nginx to apply the changes
+nginx -s reload
+
+echo "Nginx configured for custom 404 page successfully."
