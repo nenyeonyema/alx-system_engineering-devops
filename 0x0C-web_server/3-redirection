@@ -26,16 +26,6 @@ server {
 
     # Remove default Nginx server block
     include /etc/nginx/sites-enabled/*;
-
-    # Custom error page for 301 Moved Permanently
-    error_page 301 = @moved_permanently;
-
-    location @moved_permanently {
-        add_header Server "nginx/1.4.6 (Ubuntu)";
-        add_header Content-Type "text/html";
-        add_header Content-Length 193;
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
 }
 EOF
 
