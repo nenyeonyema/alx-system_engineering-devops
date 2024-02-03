@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Redirection script
 
 # Check if the script is run with sudo
 if [ "$EUID" -ne 0 ]; then
@@ -12,24 +13,11 @@ apt-get update
 # Install Nginx
 apt-get install -y nginx
 
-# Check if Nginx service is running, start if not
-if ! /etc/init.d/nginx status > /dev/null 2>&1; then
-    /etc/init.d/nginx start
-fi
-
-# Check if Nginx is listening on port 80, configure if not
-if ! netstat -tuln | grep -q ":80 "; then
-    sed -i 's/listen\ 80;/listen\ 80\ default_server;/g' /etc/nginx/sites-available/default
-    /etc/init.d/nginx restart
-fi
-
 # Configure Nginx redirection
-redirect_config="/etc/nginx/sites-available/redirect"
-
-cat <<EOF > "$redirect_config"
+cat > /etc/nginx/sites-available/redirect <<EOF
 server {
-    listen 80;
-    listen [::]:80;
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
     server_name _;
 
@@ -37,31 +25,18 @@ server {
         return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
     }
 
-    # Redirect other requests to the default Nginx welcome page
-    location / {
-        return 301 \$scheme://\$host;
-    }
+    # Remove default Nginx server block
+    include /etc/nginx/sites-enabled/*;
 }
 EOF
 
-# Enable the redirection site
-ln -s "$redirect_config" /etc/nginx/sites-enabled/
+# Activate the new configuration
+ln -s /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
 
 # Test Nginx configuration
 nginx -t
 
-# Restart Nginx to apply changes
+# Reload Nginx to apply the changes
 /etc/init.d/nginx restart
 
-# Create index.html file with "Hello World!"
-index_html="/var/www/html/index.html"
-if [ ! -f "$index_html" ]; then
-    echo "Hello World!" > "$index_html"
-fi
-
-# Ensure proper permissions for index.html
-chown www-data:www-data "$index_html"
-chmod 644 "$index_html"
-
-# Display success message
-echo "Nginx installed, configured, and redirection set successfully."
+echo "Nginx configured for redirection successfully."
