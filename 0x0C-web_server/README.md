@@ -15,5 +15,5 @@ scp -i ~/.ssh/school scp.html ubuntu@54.152.245.111
 To transfer a file from Remote machine to Local machine
 scp username@example.com:/remote/path/to/file /local/path
 
-To transfer a directory from
+To transfer a directory from remote machine to local machine.
 scp -r username@example.com:/remote/path/to/directory  /local/path

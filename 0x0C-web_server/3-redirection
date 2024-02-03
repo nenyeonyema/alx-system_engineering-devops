@@ -37,6 +37,6 @@ ln -s /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
 nginx -t
 
 # Reload Nginx to apply the changes
-systemctl reload nginx
+/etc/init.d/nginx restart
 
 echo "Nginx configured for redirection successfully."
