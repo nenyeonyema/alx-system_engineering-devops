@@ -1,4 +1,4 @@
-#Define Nginx package and service
+# Define Nginx package and service
 
 package { 'nginx':
   ensure => installed,
