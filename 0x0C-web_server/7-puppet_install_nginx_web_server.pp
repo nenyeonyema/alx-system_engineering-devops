@@ -1,42 +1,72 @@
-# Define Nginx package and service
+# Puppet configuration on a new server
 
-package { 'nginx':
-  ensure => installed,
-}
+class nginx_server {
+    package { 'nginx':
+        ensure => installed,
+    }
 
-service { 'nginx':
-  ensure => running,
-  enable => true,
-  require => Package['nginx'],
-}
+    file { '/usr/share/nginx/html/index.html':
+        ensure  => present,
+        content => "Hello World!\n",
+    }
 
-# Define Nginx configuration file
+    file { '/usr/share/nginx/html/404.html':
+        ensure  => present,
+        content => "<!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>404 Not Found</title>
+                    </head>
+                    <body>
+                        <h1>Ceci n'est pas une page</h1>
+                    </body>
+                    </html>",
+    }
 
-file { '/etc/nginx/sites-available/default':
-  ensure  => file,
-  content => template('nginx/default.erb'),
-  require => Package['nginx'],
-  notify  => service['nginx'],
-}
-# define index.html file
-file { '/var/www/html/index.html':
-  ensure  => file,
-  content => "Hello World!\n",
-  require => package['nginx'],
-}
+    file { '/etc/nginx/sites-available/default':
+        ensure  => present,
+        content => "
+            server {
+                listen 80 default_server;
+                listen [::]:80 default_server;
+                server_name _;
 
-# Define redirect configuration file
-file { '/etc/nginx/sites-available/redirect':
-  ensure  => file,
-  content => template('nginx/redirect.erb'),
-  require => Package('nginx']
-  notify  => Service['nginx'],
-}
+                root /usr/share/nginx/html;
+                index index.html;
 
-# Enable the redirect site
-file { '/etc/nginx/sites-enabled/redirect':
-  ensure => link,
-  target => '/etc/nginx/sites-available/redirect',
-  require => File['/etc/nginx/sites-available/redirect'],
-  notify => Service['nginx'],
+                location / {
+                    try_files $uri $uri/ =404;
+                    add_header Content-Type text/html;
+                    return 200 'Hello World!';
+                }
+
+                location /redirect_me {
+                    return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+                }
+
+                error_page 404 /404.html;
+                location = /404.html {
+                    root /usr/share/nginx/html;
+                    internal;
+                    add_header Content-Type text/html;
+                    return 404 '<!DOCTYPE html>
+                                <html>
+                                <head>
+                                    <title>404 Not Found</title>
+                                </head>
+                                <body>
+                                    <h1>Ceci n'\''est pas une page</h1>
+                                </body>
+                                </html>';
+                }
+            }
+        ",
+        require => Package['nginx'],
+    }
+
+    service { 'nginx':
+        ensure  => running,
+        enable  => true,
+        require => File['/etc/nginx/sites-available/default'],
+    }
 }
