@@ -1,5 +1,6 @@
 # Puppet configuration on a new server
 
+# Nginx class
 class nginx_server {
     package { 'nginx':
         ensure => installed,
@@ -12,15 +13,7 @@ class nginx_server {
 
     file { '/usr/share/nginx/html/404.html':
         ensure  => present,
-        content => "<!DOCTYPE html>
-                    <html>
-                    <head>
-                        <title>404 Not Found</title>
-                    </head>
-                    <body>
-                        <h1>Ceci n'est pas une page</h1>
-                    </body>
-                    </html>",
+        content => "Ceci n'est pas une page",
     }
 
     file { '/etc/nginx/sites-available/default':
@@ -49,15 +42,7 @@ class nginx_server {
                     root /usr/share/nginx/html;
                     internal;
                     add_header Content-Type text/html;
-                    return 404 '<!DOCTYPE html>
-                                <html>
-                                <head>
-                                    <title>404 Not Found</title>
-                                </head>
-                                <body>
-                                    <h1>Ceci n'\''est pas une page</h1>
-                                </body>
-                                </html>';
+                    return 404 "Ceci n\'est pas une page";
                 }
             }
         ",
@@ -67,6 +52,6 @@ class nginx_server {
     service { 'nginx':
         ensure  => running,
         enable  => true,
-        require => File['/etc/nginx/sites-available/default'],
+	require => File['/etc/nginx/sites-available/default'],
     }
 }
