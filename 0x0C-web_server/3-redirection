@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Redirection script
+# A script that installs nginx server
 
 # Check if the script is run with sudo
 if [ "$EUID" -ne 0 ]; then
@@ -13,12 +13,32 @@ apt-get update
 # Install Nginx
 apt-get install -y nginx
 
-# Configure Nginx redirection
+# Check if Nginx service is running, start if not
+if ! /etc/init.d/nginx status > /dev/null 2>&1; then
+    /etc/init.d/nginx start
+fi
+
+# Check if Nginx is listening on port 80, configure if not
+if ! netstat -tuln | grep -q ":80 "; then
+    sed -i 's/listen\ 80;/listen\ 80\ default_server;/g' /etc/nginx/sites-available/default
+    /etc/init.d/nginx restart
+fi
+
+# Create index.html file with "Hello World!"
+index_html="/var/www/html/index.html"
+if [ ! -f "$index_html" ]; then
+    echo "Hello World!" > "$index_html"
+fi
+
+# Ensure proper permissions for index.html
+chown www-data:www-data "$index_html"
+chmod 644 "$index_html"
+
+# Configure redirection for /redirect_me
 cat > /etc/nginx/sites-available/redirect <<EOF
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-
     server_name _;
 
     location /redirect_me {
@@ -37,6 +57,7 @@ ln -s /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
 nginx -t
 
 # Reload Nginx to apply the changes
-/etc/init.d/nginx restart
+/etc/init.d/nginx reload
 
-echo "Nginx configured for redirection successfully."
+# Display success message
+echo "Nginx installed and configured successfully with redirection."

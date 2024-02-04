@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Page not found 404
+# A script that installs nginx server and configures custom 404 page
 
 # Check if the script is run with sudo
 if [ "$EUID" -ne 0 ]; then
@@ -13,45 +13,51 @@ apt-get update
 # Install Nginx
 apt-get install -y nginx
 
-# Create custom 404 error page
-cat > /var/www/html/404.html <<EOF
-<!DOCTYPE html>
+# Check if Nginx service is running, start if not
+if ! /etc/init.d/nginx status > /dev/null 2>&1; then
+    /etc/init.d/nginx start
+fi
+
+# Check if Nginx is listening on port 80, configure if not
+if ! netstat -tuln | grep -q ":80 "; then
+    sed -i 's/listen\ 80;/listen\ 80\ default_server;/g' /etc/nginx/sites-available/default
+    /etc/init.d/nginx restart
+fi
+
+# Create custom 404 page
+echo '<!DOCTYPE html>
 <html>
 <head>
     <title>404 Not Found</title>
 </head>
 <body>
-    <h1>Ceci n'est pas une page</h1>
+    <h1>Ceci n\'est pas une page</h1>
 </body>
-</html>
-EOF
+</html>' > /usr/share/nginx/html/404.html
 
-# Configure Nginx to use the custom error page
-cat > /etc/nginx/sites-available/custom404 <<EOF
-server {
+# Configure Nginx to use the custom 404 page
+echo 'server {
     listen 80 default_server;
     listen [::]:80 default_server;
-
     server_name _;
+
+    location / {
+        root /usr/share/nginx/html;
+        try_files $uri $uri/ =404;
+    }
 
     error_page 404 /404.html;
     location = /404.html {
-        root /var/www/html;
+        root /usr/share/nginx/html;
         internal;
     }
-
-    # Remove default Nginx server block
-    include /etc/nginx/sites-enabled/*;
-}
-EOF
-
-# Activate the new configuration
-ln -s /etc/nginx/sites-available/custom404 /etc/nginx/sites-enabled/
+}' > /etc/nginx/sites-available/default
 
 # Test Nginx configuration
 nginx -t
 
 # Reload Nginx to apply the changes
-nginx -s reload
+/etc/init.d/nginx reload
 
-echo "Nginx configured for custom 404 page successfully."
+# Display success message
+echo "Nginx installed and configured successfully with custom 404 page."
