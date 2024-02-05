@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # A script that installs nginx server
 
 # Check if the script is run with sudo

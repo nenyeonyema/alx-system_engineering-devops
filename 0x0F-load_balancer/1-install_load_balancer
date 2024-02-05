@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# A script that configures a HAProxy Load Balancer
 
 # Check if the script is run with sudo
 if [ "$EUID" -ne 0 ]; then
