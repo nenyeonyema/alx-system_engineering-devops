@@ -1,5 +1,23 @@
 #!/usr/bin/env bash
-# configures a server to listening on port 80 of all servers active IPv4 IPs
+# A script that configures an nginx server listening on port 80
 
-sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-sudo service nginx restart
+# Check if the script is run with sudo
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run this script with sudo."
+    exit 1
+fi
+
+# Install Nginx
+apt-get update
+apt-get install -y nginx
+
+# Check if Nginx service is running, start if not
+if ! systemctl is-active --quiet nginx; then
+    systemctl start nginx
+fi
+
+# Check if Nginx is listening on port 80, configure if not
+if ! netstat -tuln | grep -q ":80 "; then
+    sed -i 's/listen\ 80;/listen\ 80\ default_server;/g' /etc/nginx/sites-available/default
+    systemctl restart nginx
+fi
