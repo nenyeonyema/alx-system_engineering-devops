@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# A script that configures an nginx server to listen on port 80
+
+# Install Nginx
+apt-get update
+apt-get install -y nginx
+
+# Check if Nginx service is running, start if not
+systemctl start nginx
+
+# Check if Nginx is listening on port 80, configure if not
+grep -q ":80 " /etc/nginx/sites-available/default || sed -i 's/listen\ 80;/listen\ 80\ default_server;/g' /etc/nginx/sites-available/default && systemctl restart nginx
+
+# Check Nginx status
+systemctl is-active --quiet nginx || echo " * nginx is not running"
