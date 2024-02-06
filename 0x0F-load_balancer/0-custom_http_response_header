@@ -36,4 +36,3 @@ chmod 644 "$index_html"
 
 # Display success message
 echo "Nginx installed and configured successfully."
-
