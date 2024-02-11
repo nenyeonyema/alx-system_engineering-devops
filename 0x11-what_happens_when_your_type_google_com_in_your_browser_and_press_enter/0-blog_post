@@ -1,0 +1,23 @@
+Title: Behind the Scenes: What Happens When You Type https://www.google.com  on your browser and Press Enter?
+
+Have you ever wondered what happens behind the scenes when you type a URL like https://www.google.com into your web browser and hit Enter? It may seem like a simple action, but a complex series of steps take place to deliver the webpage to your screen. Let's explore the journey your request takes through various components of the internet infrastructure.
+
+DNS Request: The process begins with a Domain Name System (DNS) request. Your browser needs to translate the human-readable domain name (e.g., www.google.com) into an IP address that computers can understand. It sends a DNS query to a DNS server, typically provided by your Internet Service Provider (ISP) or a public DNS service like Google DNS or OpenDNS.
+
+TCP/IP: Once the browser obtains the IP address of the server hosting Google's website, it initiates a Transmission Control Protocol (TCP) connection. TCP ensures reliable communication by establishing a connection between your computer and Google's server, breaking data into packets, and confirming their delivery.
+
+Firewall: Before the connection is fully established, it may encounter firewalls. Firewalls are network security systems that monitor and control incoming and outgoing network traffic based on predetermined security rules. They help protect against unauthorized access and malicious activities.
+
+HTTPS/SSL: Since you typed "https://" in the URL, your browser knows to establish a secure connection using the Hypertext Transfer Protocol Secure (HTTPS) protocol. This involves negotiating a secure connection with Google's server using Secure Sockets Layer (SSL) or Transport Layer Security (TLS) encryption. SSL/TLS ensures that the data transmitted between your browser and Google's server remains encrypted and secure from eavesdropping or tampering.
+
+Load Balancer: When your request reaches Google's servers, it may encounter a load balancer. Load balancers distribute incoming traffic across multiple servers to optimize resource usage, maximize throughput, and minimize response time. This ensures that no single server becomes overwhelmed with requests and helps maintain high availability and scalability for popular websites like Google.
+
+Web Server: Once the request is routed to an appropriate server, a web server such as Apache, Nginx, or Microsoft IIS processes the request. The web server retrieves the requested webpage or resource, generates the appropriate HTML content, and sends it back to your browser over the established HTTPS connection.
+
+Application Server: In the case of dynamic web applications or services, the web server may need to communicate with an application server. The application server runs the backend logic of the website or web application, executing scripts, interacting with databases, and generating dynamic content based on the user's request.
+
+Database: If the webpage or application requires data from a database, the application server queries the database server to retrieve the necessary information. The database server processes the query, retrieves the requested data from the database, and sends it back to the application server.
+
+Finally, the application server compiles all the necessary data, generates the HTML content dynamically, and sends it back to the web server. The web server then delivers the HTML response to your browser, which renders the webpage and displays it on your screen.
+
+In conclusion, what seems like a simple action of typing a URL and pressing Enter involves a complex interplay of various components of the internet infrastructure, including DNS, TCP/IP, firewalls, HTTPS/SSL, load balancers, web servers, application servers, and databases. Understanding this process can give you a deeper appreciation for the technology that powers the modern web and enables seamless access to information and services across the globe.
