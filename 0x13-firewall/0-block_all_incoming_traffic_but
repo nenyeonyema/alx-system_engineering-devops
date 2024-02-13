@@ -1,0 +1,13 @@
+i# Install ufw if it's not already installed
+
+sudo apt-get update
+sudo apt-get install ufw
+
+# Configure ufw to allow SSH, HTTPS, and HTTP
+sudo ufw allow 22/tcp     # Allow SSH
+sudo ufw allow 443/tcp    # Allow HTTPS
+sudo ufw allow 80/tcp     # Allow HTTP
+
+# Enable ufw and reload rules
+sudo ufw --force enable
+sudo ufw reload
