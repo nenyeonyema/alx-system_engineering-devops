@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# A script that configures the container to fit the above requirements
+
+# Stop nginx service
+service nginx stop
+
+# Change nginx user in nginx.conf file
+sed -i 's/user\s*nginx;/user nginx nginx;/' /etc/nginx/nginx.conf
+
+# Update nginx configuration to listen on port 8080
+sed -i 's/listen\s*80;/listen 8080;/' /etc/nginx/sites-available/default
+
+# Start nginx service
+service nginx start
+
+# Check nginx process status
+ps auxff | grep ngin[x]
+
+# Check if nginx is listening on port 8080
+nc -z 0 8080; echo $?
