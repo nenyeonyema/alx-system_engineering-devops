@@ -4,5 +4,5 @@ service nginx stop
 sed -i 's/user\s*nginx;/user nginx nginx;/' /etc/nginx/nginx.conf
 sed -i 's/listen\s*80;/listen 8080;/' /etc/nginx/sites-available/default
 service nginx start
-ps auxff | grep ngin[x]
+ps auxff | pgrep 'ngin[x]'
 nc -z 0 8080
