@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# A script that accepts one argument and runs the whoami command
+
+
+# Cecks if the number of arguments are not equal to one
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 USERNAME"
+    exit 1
+fi
+
+# Run the whoami command under the user passed as an argument
+sudo -u "$1" whoami
