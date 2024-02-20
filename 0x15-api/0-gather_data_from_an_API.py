@@ -8,6 +8,7 @@ import sys
 
 
 def fetch_todo_progress(employee_id):
+    """ Fetch employees IDs. """
     url = 'https://jsonplaceholder.typicode.com/users'
     response = requests.get(url)
     users = response.json()
@@ -22,7 +23,8 @@ def fetch_todo_progress(employee_id):
         print("Employee not found.")
         return
 
-    todo_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
+    todo_url = f'https://jsonplaceholder.typicode.com/\
+            todos?userId={employee_id}'
     todo_response = requests.get(todo_url)
     todos = todo_response.json()
 
