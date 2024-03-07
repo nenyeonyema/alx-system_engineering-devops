@@ -1,5 +1,4 @@
 # Puppet manifest to fix the web stack: Apache is returning a 200 and serving the correct page
-
 # Ensure that the Apache service is running
 service { 'apache2':
   ensure => 'running',
@@ -12,9 +11,9 @@ service { 'apache2':
 
 # Fix permissions on Apache log files
 file { '/var/log/apache2/error.log':
-  owner  => 'www-data',
-  group  => 'www-data',
-  mode   => '0644',
+  owner => 'www-data',
+  group => 'www-data',
+  mode  => '0644',
 }
 
 # Ensure the default Apache page is served
