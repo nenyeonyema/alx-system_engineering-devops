@@ -1,3 +1,5 @@
+![Alt text](postmortem-outage.webp)
+
 # PostMortem: Web stack Outage
 
 ## Duration:
