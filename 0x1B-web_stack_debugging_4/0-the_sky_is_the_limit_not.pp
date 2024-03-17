@@ -1,34 +1,11 @@
-# Puppet manifest to optimize Nginx configuration
+# fix  nginx failed requests
 
-# Ensure Nginx package is installed
-package { 'nginx':
-  ensure => 'installed',
+exec { 'fix--for-nginx':
+  command => 'sed -i "s/15/4096/" /etc/default/nginx',
+  path    => '/usr/local/bin/:/bin/'
 }
 
-# Define Nginx configuration file
-file { '/etc/nginx/nginx.conf':
-  ensure  => 'file',
-  owner   => 'root',
-  group   => 'root',
-  mode    => '0644',
-  content => template('nginx/nginx.conf.erb'),
-  require => Package['nginx'],
-  notify  => Service['nginx'],
-}
-
-# Ensure Nginx service is running and enabled
-service { 'nginx':
-  ensure => 'running',
-  enable => true,
-}
-
-# Define Nginx site configuration
-file { '/etc/nginx/sites-available/default':
-  ensure  => 'file',
-  owner   => 'root',
-  group   => 'root',
-  mode    => '0644',
-  content => template('nginx/default.erb'),
-  require => Package['nginx'],
-  notify  => Service['nginx'],
+-> exec { 'nginx-restart':
+  command => 'nginx restart',
+  path    => '/etc/init.d/'
 }
